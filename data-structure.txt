@@ -3,7 +3,7 @@ USE next_step;
 
 -- Bảng lưu thông tin người dùng
 CREATE TABLE users (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     username VARCHAR(255) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL, 
@@ -22,7 +22,7 @@ CREATE INDEX idx_users_is_deleted ON users(is_deleted);
 
 -- Bảng lưu thông tin vai trò
 CREATE TABLE roles (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     role_name VARCHAR(100) UNIQUE NOT NULL,
     description TEXT,
     is_deleted BOOLEAN DEFAULT FALSE,
@@ -32,7 +32,7 @@ CREATE TABLE roles (
 
 -- Bảng lưu quyền hạn
 CREATE TABLE permissions (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
     permission_name VARCHAR(100) UNIQUE NOT NULL,
     description TEXT,
     is_deleted BOOLEAN DEFAULT FALSE,
@@ -42,8 +42,8 @@ CREATE TABLE permissions (
 
 -- Bảng lưu mối quan hệ giữa người dùng và vai trò
 CREATE TABLE user_roles (
-    user_id INT,
-    role_id INT,
+    user_id BIGINT,
+    role_id BIGINT,
     PRIMARY KEY (user_id, role_id),
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -51,8 +51,8 @@ CREATE TABLE user_roles (
 
 -- Bảng lưu quyền hạn theo vai trò
 CREATE TABLE role_permissions (
-    role_id INT,
-    permission_id INT,
+    role_id BIGINT,
+    permission_id BIGINT,
     PRIMARY KEY (role_id, permission_id),
     FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE ON UPDATE CASCADE
@@ -60,8 +60,8 @@ CREATE TABLE role_permissions (
 
 -- Bảng lưu thông tin đăng nhập OAuth
 CREATE TABLE oauth_logins (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
     provider VARCHAR(255) NOT NULL,
     provider_user_id VARCHAR(255) NOT NULL,
     access_token TEXT,
@@ -75,8 +75,8 @@ CREATE TABLE oauth_logins (
 
 -- Bảng lưu access tokens
 CREATE TABLE access_tokens (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
     token VARCHAR(512) UNIQUE NOT NULL,
     expires_at TIMESTAMP NOT NULL,
     is_deleted BOOLEAN DEFAULT FALSE,
@@ -88,8 +88,8 @@ CREATE INDEX idx_access_tokens_expires ON access_tokens(expires_at);
 
 -- Bảng lưu refresh tokens
 CREATE TABLE refresh_tokens (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
     token VARCHAR(512) UNIQUE NOT NULL,
     expires_at TIMESTAMP NOT NULL,
     is_deleted BOOLEAN DEFAULT FALSE,
@@ -101,7 +101,7 @@ CREATE INDEX idx_refresh_tokens_expires ON refresh_tokens(expires_at);
 
 -- Bảng lưu thông tin các công ty
 CREATE TABLE companies (
-    company_id INT PRIMARY KEY AUTO_INCREMENT,
+    company_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(255) NOT NULL,
     description TEXT,
     state VARCHAR(100),
@@ -111,7 +111,7 @@ CREATE TABLE companies (
     address TEXT,
     url TEXT,
     logo_url TEXT,
-    specialities TEXT,  -- Chuyên môn của công ty (Lưu dưới dạng chuỗi JSON hoặc danh sách phân tách bởi dấu phẩy)
+    specialities TEXT,  
     is_deleted BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -119,14 +119,14 @@ CREATE TABLE companies (
 
 -- Bảng lưu danh sách ngành nghề
 CREATE TABLE industries (
-    industry_id INT PRIMARY KEY AUTO_INCREMENT,
+    industry_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     industry_name VARCHAR(150) UNIQUE NOT NULL
 );
 
 -- Bảng lưu quan hệ giữa công ty và ngành nghề
 CREATE TABLE company_industries (
-    company_id INT,
-    industry_id INT,
+    company_id BIGINT,
+    industry_id BIGINT,
     PRIMARY KEY (company_id, industry_id),
     FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE,
     FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE CASCADE
@@ -134,16 +134,16 @@ CREATE TABLE company_industries (
 
 -- Bảng lưu danh sách kỹ năng
 CREATE TABLE skills (
-    skill_id INT PRIMARY KEY AUTO_INCREMENT,
+    skill_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     skill_name VARCHAR(255) UNIQUE NOT NULL,
     skill_abr VARCHAR(50) UNIQUE NOT NULL  
 );
 
 -- Bảng lưu thông tin bài đăng tuyển dụng
 CREATE TABLE jobs (
-    job_id INT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT,
-    company_id INT,
+    job_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    company_id BIGINT,
     title VARCHAR(255) NOT NULL,
     description TEXT,
     location VARCHAR(255),
@@ -163,14 +163,14 @@ CREATE TABLE jobs (
 
 -- Bảng lưu danh sách mức kinh nghiệm
 CREATE TABLE experience_levels (
-    experience_id INT PRIMARY KEY AUTO_INCREMENT,
+    experience_id BIGINT PRIMARY KEY AUTO_INCREMENT,
     experience_name VARCHAR(100) UNIQUE NOT NULL
 );
 
 -- Bảng lưu quan hệ giữa công việc và mức kinh nghiệm
 CREATE TABLE job_experience_levels (
-    job_id INT,
-    experience_id INT,
+    job_id BIGINT,
+    experience_id BIGINT,
     PRIMARY KEY (job_id, experience_id),
     FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
     FOREIGN KEY (experience_id) REFERENCES experience_levels(experience_id) ON DELETE CASCADE
@@ -178,8 +178,8 @@ CREATE TABLE job_experience_levels (
 
 -- Bảng lưu kỹ năng cần thiết cho công việc
 CREATE TABLE job_skills (
-    job_id INT,
-    skill_id INT,
+    job_id BIGINT,
+    skill_id BIGINT,
     PRIMARY KEY (job_id, skill_id),
     FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
     FOREIGN KEY (skill_id) REFERENCES skills(skill_id) ON DELETE CASCADE
@@ -187,7 +187,7 @@ CREATE TABLE job_skills (
 
 -- Bảng lưu thông tin mức lương của công việc
 CREATE TABLE job_salaries (
-    job_id INT PRIMARY KEY,
+    job_id BIGINT PRIMARY KEY,
     min_salary DECIMAL(10,2),
     max_salary DECIMAL(10,2),
     currency VARCHAR(3) NOT NULL,
@@ -196,10 +196,10 @@ CREATE TABLE job_salaries (
 
 -- Bảng lưu đơn ứng tuyển
 CREATE TABLE job_applications (
-    application_id INT PRIMARY KEY AUTO_INCREMENT,
-    job_id INT,
-    user_id INT,
-    resume_url TEXT,  -- Đổi từ resume thành resume_url
+    application_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    job_id BIGINT,
+    user_id BIGINT,
+    resume_url TEXT,
     cover_letter TEXT,
     status ENUM('PENDING', 'ACCEPTED', 'REJECTED') DEFAULT 'PENDING',
     applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
