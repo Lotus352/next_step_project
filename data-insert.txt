@@ -1,79 +1,263 @@
-USE next_step;
+-- ===========================================
+-- 🟢 COMPLETE TEST DATA INSERT SCRIPT (FIXED)
+-- ===========================================
 
--- Thêm vai trò vào bảng roles
+-- 1. Roles
 INSERT INTO roles (role_name, description) VALUES
-('CANDIDATE', 'Người tìm việc'),
-('ADMIN', 'Quản trị viên'),
-('EMPLOYER', 'Nhà tuyển dụng');
+('ADMIN', 'System Administrator'),
+('EMPLOYER', 'Company Representative'),
+('CANDIDATE', 'Job Seeker');
 
--- Thêm người dùng vào bảng users
-INSERT INTO users (username, email, password_hash, full_name, avatar_url, resume_url, status, is_deleted)
-VALUES
-('candidate1', 'candidate1@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Nguyễn Văn A', NULL, 'https://example.com/resume1.pdf', 'ACTIVE', FALSE),
-('candidate2', 'candidate2@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Trần Thị B', NULL, 'https://example.com/resume2.pdf', 'ACTIVE', FALSE),
-('candidate3', 'candidate3@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Lê Văn C', NULL, 'https://example.com/resume3.pdf', 'ACTIVE', FALSE),
-('admin1', 'admin1@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Admin System', NULL, NULL, 'ACTIVE', FALSE),
-('employer1', 'employer1@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Công Ty ABC', NULL, NULL, 'ACTIVE', FALSE),
-('employer2', 'employer2@example.com', '$2a$10$D7rZ5jZUKP9ve0y7hwTgA.E2drlTCIvMNEBxIkl2btRh9FjRraMla', 'Công Ty XYZ', NULL, NULL, 'ACTIVE', FALSE);
+-- 2. Permissions
+INSERT INTO permissions (permission_name, description) VALUES
+('manage_users', 'Manage user accounts'),
+('post_jobs', 'Create job postings'),
+('apply_jobs', 'Apply to jobs');
 
--- Gán vai trò cho người dùng
-INSERT INTO user_roles (user_id, role_id)
-VALUES
-(1, 1), (2, 1), (3, 1), -- Candidates
-(4, 2), -- Admin
-(5, 3), (6, 3); -- Employers
+-- 3. Role Permissions
+INSERT INTO role_permissions (role_id, permission_id) VALUES
+(1, 1), (1, 2), (1, 3),  -- ADMIN
+(2, 2),                   -- EMPLOYER
+(3, 3);                   -- CANDIDATE
 
--- Thêm công ty vào bảng companies (Lưu chuyên môn trong cột `specialities`)
-INSERT INTO companies (name, description, state, country, city, zip_code, address, url, logo_url, specialities, is_deleted)
-VALUES
-('Công Ty ABC', 'Công ty chuyên về công nghệ AI.', 'Hà Nội', 'Việt Nam', 'Hà Nội', '100000', 'Số 123, Đường ABC', 'https://abc.com', 'https://abc.com/logo.png', '["AI", "Big Data"]', FALSE),
-('Công Ty XYZ', 'Công ty cung cấp giải pháp tài chính.', 'TP Hồ Chí Minh', 'Việt Nam', 'TP Hồ Chí Minh', '700000', 'Số 456, Đường XYZ', 'https://xyz.com', 'https://xyz.com/logo.png', '["Tài chính", "FinTech"]', FALSE),
-('Công Ty DEF', 'Chuyên về phần mềm quản lý doanh nghiệp.', 'Đà Nẵng', 'Việt Nam', 'Đà Nẵng', '550000', 'Số 789, Đường DEF', 'https://def.com', 'https://def.com/logo.png', '["ERP", "SaaS"]', FALSE);
-
--- Thêm ngành nghề vào bảng industries
+-- 4. Industries
 INSERT INTO industries (industry_name) VALUES
-('Công nghệ thông tin'), ('Tài chính'), ('Marketing'), ('Nhân sự'), ('Kỹ thuật');
+('Information Technology'),
+('Finance'),
+('Healthcare'),
+('Manufacturing'),
+('Education'),
+('Retail'),
+('Construction'),
+('Transportation'),
+('Energy'),
+('Telecommunications');
 
--- Thêm danh sách kỹ năng vào bảng skills
-INSERT INTO skills (skill_name, skill_abr) VALUES
-('Lập trình Java', 'JAVA'), ('Python', 'PY'), ('Quản lý dự án', 'PM'),
-('Phân tích dữ liệu', 'DA'), ('Marketing số', 'DM'), ('Thiết kế UX/UI', 'UX'),
-('Tài chính kế toán', 'FA'), ('Nhân sự HR', 'HR');
+-- 5. Companies (10 companies)
+INSERT INTO companies (name, description, country, logo_url, company_url) VALUES
+('Google', 'Tech giant specializing in Internet services', 'USA', 'https://logo.clearbit.com/google.com', 'https://google.com'),
+('Microsoft', 'Leading software and cloud services company', 'USA', 'https://logo.clearbit.com/microsoft.com', 'https://microsoft.com'),
+('Samsung', 'Global electronics manufacturer', 'South Korea', 'https://logo.clearbit.com/samsung.com', 'https://samsung.com'),
+('Toyota', 'Automobile manufacturing corporation', 'Japan', 'https://logo.clearbit.com/toyota.com', 'https://toyota.com'),
+('Novartis', 'Multinational pharmaceutical company', 'Switzerland', 'https://logo.clearbit.com/novartis.com', 'https://novartis.com'),
+('Amazon', 'E-commerce and cloud computing company', 'USA', 'https://logo.clearbit.com/amazon.com', 'https://amazon.com'),
+('Siemens', 'Industrial manufacturing conglomerate', 'Germany', 'https://logo.clearbit.com/siemens.com', 'https://siemens.com'),
+('Unilever', 'Consumer goods multinational', 'UK', 'https://logo.clearbit.com/unilever.com', 'https://unilever.com'),
+('Tesla', 'Electric vehicle and clean energy company', 'USA', 'https://logo.clearbit.com/tesla.com', 'https://tesla.com'),
+('Sony', 'Electronics and entertainment conglomerate', 'Japan', 'https://logo.clearbit.com/sony.com', 'https://sony.com');
 
--- Thêm công việc vào bảng jobs
-INSERT INTO jobs (user_id, company_id, title, description, location, employment_type, pay_period, work_type, job_url, remote_allowed, is_deleted)
-VALUES
-(5, 1, 'Lập trình viên Java', 'Phát triển ứng dụng web bằng Java.', 'Hà Nội', 'FULL_TIME', 'MONTHLY', 'FULL_TIME', 'https://abc.com/jobs/java', TRUE, FALSE),
-(5, 1, 'Chuyên viên Python', 'Phát triển AI bằng Python.', 'Hà Nội', 'FULL_TIME', 'YEARLY', 'FULL_TIME', 'https://abc.com/jobs/python', TRUE, FALSE),
-(6, 2, 'Chuyên viên tài chính', 'Phân tích tài chính doanh nghiệp.', 'TP Hồ Chí Minh', 'CONTRACT', 'YEARLY', 'PART_TIME', 'https://xyz.com/jobs/finance', FALSE, FALSE),
-(6, 3, 'Chuyên viên Marketing', 'Quản lý chiến dịch quảng cáo.', 'Đà Nẵng', 'CONTRACT', 'MONTHLY', 'PART_TIME', 'https://xyz.com/jobs/marketing', FALSE, FALSE),
-(6, 3, 'Nhân sự tổng hợp', 'Quản lý nhân sự trong doanh nghiệp.', 'Đà Nẵng', 'FULL_TIME', 'WEEKLY', 'FULL_TIME', 'https://xyz.com/jobs/hr', FALSE, FALSE);
+-- 6. Users (10 users)
+INSERT INTO users (username, email, password_hash, full_name, status, company_id) VALUES
+-- ADMIN
+('admin1', 'admin@nextstep.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Michael Johnson', 'ACTIVE', NULL),
 
--- Liên kết công việc với kỹ năng
-INSERT INTO job_skills (job_id, skill_id) VALUES
-(1, 1), (1, 4), -- Java + Phân tích dữ liệu
-(2, 2), (2, 4), -- Python + Phân tích dữ liệu
-(3, 7), -- Tài chính kế toán
-(4, 5), -- Marketing số
-(5, 8); -- Nhân sự HR
+-- EMPLOYERS
+('employer1', 'hr@google.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Sarah Wilson', 'ACTIVE', 1),
+('employer2', 'careers@microsoft.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'James Smith', 'ACTIVE', 2),
+('employer3', 'recruiting@samsung.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Ji-hoon Kim', 'ACTIVE', 3),
+('employer4', 'hiring@tesla.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Elon Musk', 'ACTIVE', 9),
 
--- Thêm danh sách mức kinh nghiệm vào bảng experience_levels
+-- CANDIDATES
+('candidate1', 'john.doe@email.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'John Doe', 'ACTIVE', NULL),
+('candidate2', 'jane.smith@email.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Jane Smith', 'ACTIVE', NULL),
+('candidate3', 'robert.brown@email.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Robert Brown', 'ACTIVE', NULL),
+('candidate4', 'emily.wilson@email.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Emily Wilson', 'ACTIVE', NULL),
+('banned1', 'banned@test.com', '$2a$12$DfUWeUarVHtUs/LdTPJWyuBPL6ZjNRymFYOx/VZAapa0DFPV2H1GC', 'Banned User', 'BANNED', NULL);
+
+-- 7. User Roles
+INSERT INTO user_roles (user_id, role_id) VALUES
+(1, 1),  -- Admin
+(2, 2), (3, 2), (4, 2), (5, 2),  -- Employers
+(6, 3), (7, 3), (8, 3), (9, 3), (10, 3);  -- Candidates
+
+-- 8. Company Industries
+INSERT INTO company_industries (company_id, industry_id) VALUES
+(1, 1), (2, 1), (3, 1), 
+(4, 4), (5, 3), (6, 6), 
+(7, 4), (8, 6), (9, 4), (10, 1);
+
+-- 9. Company Specialities
+INSERT INTO company_specialities (company_id, speciality_name) VALUES
+(1, 'Search Algorithms'), (1, 'Mobile OS'),
+(2, 'Enterprise Software'), (2, 'Cloud Computing'),
+(3, 'Consumer Electronics'), (3, 'Semiconductors'),
+(4, 'Hybrid Vehicles'), (4, 'Automation'),
+(5, 'Pharmaceuticals'), (5, 'Vaccine Research'),
+(6, 'E-commerce'), (6, 'AWS Cloud'),
+(7, 'Industrial Automation'), (7, 'Smart Infrastructure'),
+(8, 'Consumer Packaged Goods'), (8, 'Sustainable Products'),
+(9, 'Electric Vehicles'), (9, 'Solar Energy'),
+(10, 'Gaming Consoles'), (10, 'Entertainment Systems');
+
+-- 10. Skills
+INSERT INTO skills (skill_name) VALUES
+('Java'), ('Python'), ('AWS'),
+('React'), ('Machine Learning'), 
+('Project Management'), ('CAD Design'),
+('Kubernetes'), ('Docker'), ('Azure'),
+('TensorFlow'), ('PyTorch'), ('Node.js'),
+('Spring Boot'), ('Microservices'), ('CI/CD');
+
+-- 11. Experience Levels
 INSERT INTO experience_levels (experience_name) VALUES
-('ASSOCIATE'), ('DIRECTOR'), ('ENTRY_LEVEL'), ('EXECUTIVE'), ('INTERNSHIP'), ('MID_SENIOR_LEVEL');
+('Intern'), ('Junior'), ('Mid-Level'), ('Senior'),
+('Lead'), ('Principal');
 
--- Liên kết công việc với kinh nghiệm
+-- 12. Job Salaries (10 entries)
+INSERT INTO job_salaries (min_salary, max_salary, currency, pay_period) VALUES
+(80000, 120000, 'USD', 'YEARLY'),
+(5000, 7000, 'USD', 'MONTHLY'),
+(40000, 60000, 'EUR', 'YEARLY'),
+(3000, 4500, 'GBP', 'MONTHLY'),
+(95000, 130000, 'USD', 'YEARLY'),
+(45, 65, 'USD', 'HOURLY'),
+(7000, 9000, 'SGD', 'MONTHLY'),
+(100000, 150000, 'CAD', 'YEARLY'),
+(600000, 800000, 'INR', 'YEARLY'),
+(50000, 75000, 'AUD', 'YEARLY');
+
+-- 13. Jobs (10 jobs with complete fields)
+INSERT INTO jobs (
+  user_id, 
+  company_id, 
+  salary_id,
+  title,
+  short_description,
+  detailed_description,
+  location,
+  employment_type,
+  work_type,
+  job_url,
+  remote_allowed,
+  expiry_date
+) VALUES
+(2, 1, 1, 'Senior Java Developer', 
+ 'Develop high-performance backend systems', 
+ '5+ years experience with Spring Boot and microservices. Must have AWS experience.',
+ 'Mountain View, CA', 'FULL_TIME', 'PERMANENT', 'https://careers.google.com/jobs/001', TRUE, '2024-12-31'),
+
+(3, 2, 2, 'Cloud Architect', 
+ 'Design Azure cloud solutions', 
+ 'Certified Azure Architect with 3+ years cloud migration experience.',
+ 'Redmond, WA', 'CONTRACT', 'CONTRACTOR', 'https://careers.microsoft.com/jobs/002', TRUE, '2024-11-30'),
+
+(4, 3, 3, 'ML Engineer', 
+ 'Build AI-powered mobile features', 
+ 'Strong Python and TensorFlow skills required. Experience with edge computing preferred.',
+ 'Seoul, South Korea', 'FULL_TIME', 'PERMANENT', 'https://careers.samsung.com/jobs/003', TRUE, '2024-10-15'),
+
+(5, 9, 4, 'Automation Engineer', 
+ 'Develop manufacturing robots', 
+ 'Expertise in industrial automation and CAD design. 5+ years experience.',
+ 'Fremont, CA', 'FULL_TIME', 'PERMANENT', 'https://www.tesla.com/careers/004', FALSE, '2024-09-30'),
+
+(2, 1, 5, 'Frontend Intern', 
+ 'Learn React development', 
+ '6-month internship program for recent graduates. Basic JavaScript knowledge required.',
+ 'New York, NY', 'INTERNSHIP', 'INTERN', 'https://careers.google.com/jobs/005', TRUE, '2024-08-31'),
+
+(3, 2, 6, 'DevOps Lead', 
+ 'Manage Kubernetes clusters', 
+ '5+ years experience with Terraform and CI/CD pipelines. AWS/GCP certification required.',
+ 'London, UK', 'FULL_TIME', 'PERMANENT', 'https://careers.microsoft.com/jobs/006', TRUE, '2024-07-31'),
+
+(4, 3, 7, 'Embedded Systems Engineer', 
+ 'Develop IoT devices', 
+ 'Expertise in C/C++ and RTOS. Experience with ARM processors.',
+ 'Suwon, South Korea', 'CONTRACT', 'CONTRACTOR', 'https://careers.samsung.com/jobs/007', FALSE, '2024-06-30'),
+
+(5, 9, 8, 'Battery Engineer', 
+ 'Improve EV battery technology', 
+ 'PhD in Materials Science with 3+ years battery research experience.',
+ 'Austin, TX', 'FULL_TIME', 'PERMANENT', 'https://www.tesla.com/careers/008', FALSE, '2024-05-31'),
+
+(2, 1, 9, 'Security Engineer', 
+ 'Protect cloud infrastructure', 
+ 'CISSP certified with 5+ years security experience. Kubernetes security knowledge required.',
+ 'Sunnyvale, CA', 'FULL_TIME', 'PERMANENT', 'https://careers.google.com/jobs/009', TRUE, '2024-04-30'),
+
+(3, 2, 10, 'Technical Writer', 
+ 'Create API documentation', 
+ 'Strong technical writing skills with OpenAPI/Swagger experience.',
+ 'Vancouver, Canada', 'PART_TIME', 'PART_TIME', 'https://careers.microsoft.com/jobs/010', TRUE, '2024-03-31');
+
+-- 14. Job Skills
+INSERT INTO job_skills (job_id, skill_id) VALUES
+(1,1), (1,3), (1,14),   -- Java, AWS, Spring Boot
+(2,3), (2,10), (2,15),  -- AWS, Azure, CI/CD
+(3,2), (3,5), (3,11),   -- Python, ML, TensorFlow
+(4,7), (4,8), (4,9),    -- CAD, Kubernetes, Docker
+(5,4), (5,13),          -- React, Node.js
+(6,8), (6,9), (6,15),   -- Kubernetes, Docker, CI/CD
+(7,1), (7,3),           -- Java, AWS
+(8,2), (8,5),           -- Python, ML
+(9,3), (9,8), (9,15),   -- AWS, Kubernetes, CI/CD
+(10,6);                 -- Project Management
+
+-- 15. Job Experience Levels
 INSERT INTO job_experience_levels (job_id, experience_id) VALUES
-(1, 3), (1, 6), -- ENTRY_LEVEL + MID_SENIOR_LEVEL cho job 1
-(2, 6), (2, 4), -- MID_SENIOR_LEVEL + EXECUTIVE cho job 2
-(3, 1), (3, 4), -- ASSOCIATE + EXECUTIVE cho job 3
-(4, 3), (4, 1), -- ENTRY_LEVEL + ASSOCIATE cho job 4
-(5, 6), (5, 2); -- MID_SENIOR_LEVEL + DIRECTOR cho job 5
+(1,4), (1,5),   -- Senior, Lead
+(2,4), 
+(3,3), (3,4),
+(4,4), (4,6),   -- Senior, Principal
+(5,1), 
+(6,5), 
+(7,3), 
+(8,4), (8,6),
+(9,4), 
+(10,2);
 
--- Thêm ứng viên ứng tuyển vào công việc (Thay đổi `resume` thành `resume_url`)
-INSERT INTO job_applications (job_id, user_id, resume_url, cover_letter, status, is_deleted)
-VALUES
-(1, 1, 'https://example.com/resume1.pdf', 'Tôi quan tâm đến vị trí này.', 'PENDING', FALSE),
-(2, 2, 'https://example.com/resume2.pdf', 'Muốn thử sức với AI.', 'PENDING', FALSE),
-(3, 3, 'https://example.com/resume3.pdf', 'Tôi yêu thích lĩnh vực tài chính.', 'PENDING', FALSE),
-(4, 1, 'https://example.com/resume1.pdf', 'Kinh nghiệm Marketing tốt.', 'PENDING', FALSE),
-(5, 2, 'https://example.com/resume2.pdf', 'Muốn làm nhân sự.', 'PENDING', FALSE);
+-- 16. Job Applications
+INSERT INTO job_applications (job_id, user_id, resume_url, cover_letter, status) VALUES
+(1,6, 'https://storage.example.com/john_doe_cv.pdf', 'Experienced Java developer with 8 years in backend systems...', 'PENDING'),
+(1,7, 'https://storage.example.com/jane_smith_cv.pdf', 'Spring Boot expert with cloud experience...', 'ACCEPTED'),
+(2,6, 'https://storage.example.com/john_doe_cv.pdf', 'Azure certified architect...', 'REJECTED'),
+(3,7, 'https://storage.example.com/jane_smith_cv.pdf', 'Machine learning specialist...', 'ACCEPTED'),
+(4,8, 'https://storage.example.com/robert_brown_cv.pdf', 'CAD design expert...', 'PENDING'),
+(5,9, 'https://storage.example.com/emily_wilson_cv.pdf', 'Recent CS graduate...', 'PENDING'),
+(6,6, 'https://storage.example.com/john_doe_cv.pdf', 'DevOps lead with 5+ years...', 'ACCEPTED'),
+(7,7, 'https://storage.example.com/jane_smith_cv.pdf', 'Embedded systems engineer...', 'REJECTED'),
+(8,8, 'https://storage.example.com/robert_brown_cv.pdf', 'Battery technology researcher...', 'PENDING'),
+(9,9, 'https://storage.example.com/emily_wilson_cv.pdf', 'Security certification holder...', 'ACCEPTED');
+
+-- 17. Company Reviews
+INSERT INTO company_reviews (company_id, user_id, rating, review_text) VALUES
+(1,6,4.5, 'Innovative environment with great perks'),
+(1,7,4.8, 'Best workplace for tech enthusiasts'),
+(2,8,4.2, 'Challenging projects with global impact'),
+(3,9,3.9, 'Fast-paced but needs better work-life balance'),
+(9,6,4.7, 'Revolutionizing the automotive industry'),
+(9,7,4.5, 'Exciting cutting-edge technology work'),
+(2,9,4.0, 'Good benefits package and career growth'),
+(3,6,3.5, 'Bureaucratic processes slow things down'),
+(1,8,4.6, 'Amazing company culture and smart colleagues'),
+(9,7,4.9, 'The future of transportation is here');
+
+-- 18. User Job Favorites
+INSERT INTO user_job_favorites (user_id, job_id) VALUES
+(6,1), (6,3), (6,5),
+(7,2), (7,4), 
+(8,6), (8,9),
+(9,7), (9,10),
+(6,8);
+
+-- 19. Notifications
+INSERT INTO notifications (user_id, job_id, message, status) VALUES
+(6,1, 'Your application to Google has been received', 'UNREAD'),
+(7,NULL, '3 new jobs match your skills', 'UNREAD'),
+(8,4, 'Interview scheduled for Friday 2pm', 'READ'),
+(9,7, 'Application status updated to REJECTED', 'UNREAD'),
+(6,5, 'Reminder: Technical assessment due tomorrow', 'READ'),
+(7,2, 'Congratulations! Offer letter sent', 'UNREAD'),
+(8,NULL, 'Complete your profile to get better matches', 'UNREAD'),
+(9,9, 'Reference check completed', 'READ'),
+(6,10, 'New message from recruiter', 'UNREAD'),
+(7,3, 'Request for additional documents', 'READ');
+
+-- 20. OAuth Logins
+INSERT INTO oauth_logins (user_id, provider, provider_user_id) VALUES
+(6, 'GOOGLE', 'google-oauth2|1234567890'),
+(7, 'LINKEDIN', 'linkedin-oauth2|987654321'),
+(8, 'GITHUB', 'github-oauth2|192837465'),
+(9, 'MICROSOFT', 'microsoft-oauth2|564738291'),
+(10, 'FACEBOOK', 'facebook-oauth2|1122334455');
