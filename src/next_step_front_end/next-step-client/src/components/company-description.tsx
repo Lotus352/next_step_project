@@ -9,15 +9,18 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar.tsx";
-import { Building, Globe, MapPin, Star, Users } from "lucide-react";
+import { Building, Globe, MapPin, Users } from "lucide-react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store.ts";
-import Company from "@/types/company.ts";
+import ReviewStar from "@/components/review-star.tsx";
+import ErrorPage from "@/pages/error-page.tsx";
+import CompanyType from "@/types/company-type.ts";
 
 export default function CompanyDescription() {
   const { selectedJob } = useSelector((state: RootState) => state.jobs);
-  if (!selectedJob) return null;
-  const company: Company = selectedJob.postedBy.company;
+  if (!selectedJob) return <ErrorPage />;
+  const company: CompanyType = selectedJob.postedBy.company;
+
   return (
     <Card>
       <CardHeader>
@@ -25,7 +28,7 @@ export default function CompanyDescription() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex items-center space-x-4 mb-4">
-          <Avatar className="h-16 w-16">
+          <Avatar className="h-16 w-16 border-0 rounded-lg">
             <AvatarImage
               src={company.logoUrl}
               alt="/placeholder.svg?height=64&width=64"
@@ -34,22 +37,18 @@ export default function CompanyDescription() {
           </Avatar>
           <div>
             <h3 className="text-xl font-semibold">{company.name}</h3>
-            <p className="text-muted-foreground">
+            <span className="text-muted-foreground">
               {company.industries.map((industry) => (
-                <p key={industry.industryId}>{industry.industryName}</p>
+                <span key={industry.industryId}>{industry.industryName}</span>
               ))}
               <p>• {company.countEmployees} employees</p>
-            </p>
-            <div className="flex items-center mt-1">
-              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <Star className="h-4 w-4 text-yellow-500 fill-yellow-500" />
-              <Star className="h-4 w-4 text-yellow-500" />
-              <span className="ml-2 text-sm text-muted-foreground">
-                (4.2/5 from 78 reviews)
-              </span>
-            </div>
+            </span>
+
+            {/*Review Star*/}
+            <ReviewStar
+              countReview={company.countReview}
+              averageRating={company.averageRating}
+            />
           </div>
         </div>
         <div>{company.description}</div>

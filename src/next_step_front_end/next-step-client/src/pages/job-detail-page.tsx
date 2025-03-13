@@ -20,6 +20,8 @@ import Loading from "@/components/loading.tsx";
 import ErrorPage from "@/pages/error-page.tsx";
 import JobDetailHeader from "@/components/job-detail-header.tsx";
 import JobDetailTabs from "@/components/job-detail-tabs.tsx";
+import CompanyLocation from "@/components/company-location.tsx";
+import {clearSelectedCompany} from "@/store/slices/companies-slice.ts";
 
 export default function JobDetailPage() {
   const navigate = useNavigate();
@@ -28,10 +30,7 @@ export default function JobDetailPage() {
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
 
   useEffect(() => {
@@ -40,6 +39,7 @@ export default function JobDetailPage() {
     }
     return () => {
       dispatch(clearSelectedJob());
+      dispatch(clearSelectedCompany())
     };
   }, [dispatch, jobId]);
 
@@ -47,7 +47,12 @@ export default function JobDetailPage() {
     return <Loading />;
   }
 
-  if (status === "failed" || !selectedJob) return <ErrorPage />;
+  if (status === "failed" || !selectedJob) {
+    return <ErrorPage />;
+  }
+
+  // Lấy name và address từ selectedJob
+  const { name = "", address = "" } = selectedJob.postedBy?.company ?? {};
 
   return (
     <div className="container mx-auto py-6 px-4 md:px-6">
@@ -67,7 +72,7 @@ export default function JobDetailPage() {
           <JobDetailHeader job={selectedJob} />
 
           {/* Job Detail Tabs */}
-          <JobDetailTabs></JobDetailTabs>
+          <JobDetailTabs />
         </div>
 
         <div className="space-y-6">
@@ -105,28 +110,8 @@ export default function JobDetailPage() {
             </CardFooter>
           </Card>
 
-          {/* Company Location */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Location</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="aspect-video bg-muted rounded-md flex items-center justify-center mb-4">
-                <img
-                  src=""
-                  alt="Map location"
-                  className="rounded-md w-full h-full object-cover"
-                />
-              </div>
-              <div className="space-y-2">
-                <h4 className="font-medium">TechCorp Inc. Headquarters</h4>
-                <p className="text-sm text-muted-foreground">
-                  123 Tech Street, District 1<br />
-                  Ho Chi Minh City, Vietnam
-                </p>
-              </div>
-            </CardContent>
-          </Card>
+          {/* CompanyType Location */}
+          <CompanyLocation name={name} address={address} />
 
           {/* Related Jobs */}
           <RelatedJobs />

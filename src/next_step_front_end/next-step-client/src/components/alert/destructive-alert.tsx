@@ -6,7 +6,7 @@ import {
     AlertTitle,
 } from "@/components/ui/alert.tsx"
 
-export default function AlertDestructive() {
+export default function DestructiveAlert() {
     return (
         <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />

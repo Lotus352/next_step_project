@@ -1,4 +1,4 @@
-export default interface Salary {
+export default interface SalaryType {
     salaryId: number;
     minSalary: number;
     maxSalary: number;

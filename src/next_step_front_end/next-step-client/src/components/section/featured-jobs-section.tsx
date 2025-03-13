@@ -1,7 +1,7 @@
 import FeaturedJobs from "@/components/featured-jobs.tsx";
 import {ArrowRight} from "lucide-react"
-import {Button} from "@/components/ui/button"
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs"
+import {Button} from "@/components/ui/button.tsx"
+import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx"
 
 export default function FeaturedJobsSection() {
   return (
@@ -29,7 +29,7 @@ export default function FeaturedJobsSection() {
                 </TabsList>
               </div>
               <TabsContent value="all">
-                <FeaturedJobs filter={"all"}/>
+                <FeaturedJobs filter={"ALL"}/>
               </TabsContent>
               <TabsContent value="part-time">
                 <FeaturedJobs filter={"PART_TIME"}/>

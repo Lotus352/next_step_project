@@ -1,6 +1,6 @@
-import Industry from "@/types/industry.ts";
+import IndustryType from "@/types/industry-type.ts";
 
-export default interface Company {
+export default interface CompanyType {
     companyId: number;
     name: string;
     description: string;
@@ -14,5 +14,9 @@ export default interface Company {
     founded: boolean;
     specialities: string[];
     countEmployees: number;
-    industries: Industry[];
+    industries: IndustryType[];
+
+    countJobOpening: number;
+    countReview: number;
+    averageRating: number;
 }

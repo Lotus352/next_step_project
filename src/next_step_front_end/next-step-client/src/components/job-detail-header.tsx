@@ -14,19 +14,18 @@ import {
 import {
   Bookmark,
   Briefcase,
-  CalendarDays,
-  HandCoins,
+  CalendarDays, Coins,
   MapPin,
   Share2,
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import { Badge } from "@/components/ui/badge.tsx";
-import JobDetail from "@/types/job-detail.ts";
+import JobDetailType from "@/types/job-detail-type.ts";
 import { useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 
-export default function JobDetailHeader({ job }: { job: JobDetail }) {
+export default function JobDetailHeader({ job }: { job: JobDetailType }) {
   const [bookmarked, setBookmarked] = useState(false);
 
   return (
@@ -34,7 +33,7 @@ export default function JobDetailHeader({ job }: { job: JobDetail }) {
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between">
           <div className="flex items-center space-x-4">
-            <Avatar className="h-16 w-16 border rounded">
+            <Avatar className="h-16 w-16 border-0 rounded-lg">
               <AvatarImage
                 src={job.postedBy.company.logoUrl}
                 alt="/placeholder.svg?height=64&width=64"
@@ -42,7 +41,7 @@ export default function JobDetailHeader({ job }: { job: JobDetail }) {
               <AvatarFallback>{job.postedBy.company.name}</AvatarFallback>
             </Avatar>
             <div>
-              <CardTitle className="text-2xl font-bold">{job.title}</CardTitle>
+              <CardTitle className="text-xl font-bold">{job.title}</CardTitle>
               <CardDescription className="text-lg">
                 {job.postedBy.company.name}
               </CardDescription>
@@ -76,7 +75,7 @@ export default function JobDetailHeader({ job }: { job: JobDetail }) {
               <div className="flex items-center mt-1 text-sm">
                 <div className="font-medium flex flex-row">
                   <span className={"flex"}>
-                    <HandCoins className="h-5 w-5 mr-1 text-primary" />
+                    <Coins className="h-5 w-5 mr-1 text-primary" />
                     {job.salary.minSalary} - {job.salary.maxSalary}{" "}
                     {job.salary.currency}
                   </span>
@@ -116,7 +115,7 @@ export default function JobDetailHeader({ job }: { job: JobDetail }) {
               <div className="flex items-center mt-1 text-sm">
                 <Users className="h-4 w-4 mr-1 text-primary" />
                 {job.experienceLevels.map((exp, index) => (
-                  <span className="font-medium pr-1">{exp.experienceName}{index != (job.experienceLevels.length -1) ? ", " : ""}</span>
+                  <span className="font-medium pr-1" key={exp.experienceId}>{exp.experienceName}{index != (job.experienceLevels.length -1) ? ", " : ""}</span>
                 )
                 )}
               </div>

@@ -10,7 +10,7 @@ import { RootState } from "@/store/store.ts";
 import ErrorPage from "@/pages/error-page.tsx";
 import JobDescription from "@/components/job-description.tsx";
 import CompanyDescription from "@/components/company-description.tsx";
-import CompanyReviewsSection from "@/components/company-reviews-section.tsx";
+import CompanyReviewsSection from "@/components/section/company-reviews-section.tsx";
 
 export default function JobDetailTabs() {
   const { selectedJob } = useSelector((state: RootState) => state.jobs);

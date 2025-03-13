@@ -1,7 +1,7 @@
-import Skill from "@/types/skill.ts";
-import Salary from "@/types/salary.ts";
+import SkillType from "@/types/skill-type.ts";
+import SalaryType from "@/types/salary-type.ts";
 
-export default interface JobFeature {
+export default interface FeaturedJobType {
     jobId: number;
     title: string;
     shortDescription: string;
@@ -9,8 +9,8 @@ export default interface JobFeature {
     employmentType: string;
     companyName: string;
     companyLogo: string ;
-    skills: Skill[];
-    salary: Salary;
+    skills: SkillType[];
+    salary: SalaryType;
     createdAt: string;
     isFavorite: boolean;
 }

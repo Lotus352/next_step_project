@@ -1,4 +1,4 @@
-import Company from "@/types/company.ts";
+import CompanyType from "@/types/company-type.ts";
 
 export default interface PostedBy {
     id: number;
@@ -8,5 +8,5 @@ export default interface PostedBy {
     avatarUrl: string | null;
     resumeUrl: string | null;
     status: string;
-    company: Company;
+    company: CompanyType;
 }

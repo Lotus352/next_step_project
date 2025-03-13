@@ -1,10 +1,10 @@
 import Header from "@/components/layout/header.tsx";
-import HeroSection from "@/components/hero-section.tsx";
-import JobCategories from "@/components/job-categories-section.tsx";
-import FeaturedJobs from "@/components/featured-jobs-section.tsx";
+import HeroSection from "@/components/section/hero-section.tsx";
+import JobCategories from "@/components/section/featured-categories-section.tsx";
+import FeaturedJobs from "@/components/section/featured-jobs-section.tsx";
 import HowItWorks from "@/components/how-it-works.tsx";
-import FeaturedCompanies from "@/components/featured-companies.tsx";
-import CTASection from "@/components/cta-section.tsx";
+import FeaturedCompaniesSection from "@/components/section/featured-companies-section.tsx";
+import CTASection from "@/components/section/cta-section.tsx";
 import Footer from "@/components/layout/footer.tsx";
 
 export default function HomePage() {
@@ -15,7 +15,7 @@ export default function HomePage() {
             <JobCategories />
             <FeaturedJobs />
             <HowItWorks />
-            <FeaturedCompanies />
+            <FeaturedCompaniesSection />
             <CTASection />
             <Footer />
         </div>

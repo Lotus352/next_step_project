@@ -25,9 +25,9 @@ export default function HeroSection() {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2">
               <div>
-                <h1 className="sm:flex flex-row text-3xl pr-2 font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
+                <h1 className="sm:flex flex-row text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
                   Find Your
-                  <span className={"bg-gray-400 mx-2 inline-block"}>
+                  <span className={"bg-gray-400 mx-2"}>
                     Dream Job
                   </span>
                   Today

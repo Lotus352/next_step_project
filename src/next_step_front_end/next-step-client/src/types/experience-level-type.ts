@@ -1,4 +1,4 @@
-export default interface ExperienceLevel {
+export default interface ExperienceLevelType {
     experienceId: number;
     experienceName: string;
 }

@@ -1,6 +1,6 @@
-import JobCategories from "@/components/job-categories";
+import FeaturedCategories from "@/components/featured-categories.tsx";
 
-export default function JobCategoriesSection() {
+export default function FeaturedCategoriesSection() {
     return (
         <section className="py-12 md:py-16 bg-background">
             <div className="container px-4 md:px-6">
@@ -17,7 +17,7 @@ export default function JobCategoriesSection() {
                         </p>
                     </div>
                 </div>
-                <JobCategories/>
+                <FeaturedCategories/>
             </div>
         </section>
     );
