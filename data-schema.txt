@@ -1,0 +1,211 @@
+CREATE DATABASE next_step;
+USE next_step;
+
+-- ==============================
+-- 🟢 BẢNG CÔNG TY & NGÀNH NGHỀ
+-- ==============================
+
+CREATE TABLE companies (
+    company_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    state VARCHAR(100),
+    country VARCHAR(100),
+    zip_code VARCHAR(20),
+    address TEXT,
+    company_url TEXT,
+    logo_url TEXT,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE industries (
+    industry_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    industry_name VARCHAR(150) UNIQUE NOT NULL
+);
+
+CREATE TABLE company_industries (
+    company_id BIGINT,
+    industry_id BIGINT,
+    PRIMARY KEY (company_id, industry_id),
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE,
+    FOREIGN KEY (industry_id) REFERENCES industries(industry_id) ON DELETE CASCADE
+);
+
+CREATE TABLE company_specialities (
+    company_id BIGINT,
+    speciality_name VARCHAR(255),
+    PRIMARY KEY (company_id, speciality_name),
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE
+);
+
+-- ==============================
+-- 🟢 BẢNG NGƯỜI DÙNG & PHÂN QUYỀN
+-- ==============================
+
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    full_name VARCHAR(255),
+    avatar_url TEXT,
+    resume_url TEXT,
+    status VARCHAR(50) DEFAULT 'ACTIVE',
+    company_id BIGINT,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE SET NULL
+);
+
+CREATE TABLE roles (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    role_name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE permissions (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    permission_name VARCHAR(100) UNIQUE NOT NULL,
+    description TEXT
+);
+
+CREATE TABLE user_roles (
+    user_id BIGINT,
+    role_id BIGINT,
+    PRIMARY KEY (user_id, role_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+);
+
+CREATE TABLE role_permissions (
+    role_id BIGINT,
+    permission_id BIGINT,
+    PRIMARY KEY (role_id, permission_id),
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE,
+    FOREIGN KEY (permission_id) REFERENCES permissions(id) ON DELETE CASCADE
+);
+
+-- ==============================
+-- 🟢 BẢNG CÔNG VIỆC & MỨC LƯƠNG
+-- ==============================
+
+CREATE TABLE job_salaries (
+    salary_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    min_salary DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    max_salary DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    currency VARCHAR(10) NOT NULL DEFAULT 'USD',
+    pay_period VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE jobs (
+    job_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    company_id BIGINT,
+    salary_id BIGINT UNIQUE,
+    title VARCHAR(255) NOT NULL,
+    short_description TEXT,
+    detailed_description LONGTEXT,   
+    location VARCHAR(255),
+    employment_type VARCHAR(50),
+    work_type VARCHAR(50),
+    job_url TEXT,
+    remote_allowed BOOLEAN DEFAULT FALSE,
+    expiry_date TIMESTAMP,
+    status VARCHAR(50) NOT NULL DEFAULT 'OPEN',
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE,
+    FOREIGN KEY (salary_id) REFERENCES job_salaries(salary_id) ON DELETE SET NULL
+);
+
+CREATE TABLE experience_levels (
+    experience_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    experience_name VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE job_experience_levels (
+    job_id BIGINT,
+    experience_id BIGINT,
+    PRIMARY KEY (job_id, experience_id),
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (experience_id) REFERENCES experience_levels(experience_id) ON DELETE CASCADE
+);
+
+CREATE TABLE skills (
+    skill_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    skill_name VARCHAR(255) UNIQUE NOT NULL
+);
+
+CREATE TABLE job_skills (
+    job_id BIGINT,
+    skill_id BIGINT,
+    PRIMARY KEY (job_id, skill_id),
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (skill_id) REFERENCES skills(skill_id) ON DELETE CASCADE
+);
+
+-- ==============================
+-- 🟢 BẢNG ỨNG TUYỂN & ĐÁNH GIÁ
+-- ==============================
+
+CREATE TABLE job_applications (
+    application_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    job_id BIGINT,
+    user_id BIGINT,
+    resume_url TEXT,
+    cover_letter TEXT,
+    status VARCHAR(50) DEFAULT 'PENDING',
+    applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE company_reviews (
+    review_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    company_id BIGINT NOT NULL,
+    user_id BIGINT NOT NULL,
+    rating DECIMAL(2,1) NOT NULL,
+    review_text TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (company_id) REFERENCES companies(company_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE user_job_favorites (
+    user_id BIGINT,
+    job_id BIGINT,
+    PRIMARY KEY (user_id, job_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
+);
+
+-- ==============================
+-- 🟢 BẢNG HỆ THỐNG & BẢO MẬT
+-- ==============================
+
+CREATE TABLE oauth_logins (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT,
+    provider VARCHAR(255) NOT NULL,
+    provider_user_id VARCHAR(255) NOT NULL,
+    UNIQUE (provider, provider_user_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE notifications (
+    notification_id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+	job_id BIGINT NULL,
+    message TEXT NOT NULL,
+    status VARCHAR(50) DEFAULT 'UNREAD',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    read_at TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
+);
+
